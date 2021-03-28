@@ -24,8 +24,9 @@
     CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     -->
 
-    <link rel="stylesheet" href="photon/style.css"></link>
-    <link rel="stylesheet" href="options.css"></link>
+    <link class="firefox" rel="stylesheet" href="photon/style.css"></link>
+    <link class="firefox" rel="stylesheet" href="options-firefox.css"></link>
+    <link class="chrome" rel="stylesheet" href="options-chrome.css"></link>
   </head>
 
   <body>
@@ -34,12 +35,12 @@
       <p>
         <label for="voice">__MSG_preferredVoice__</label>
         <select name="__MSG_preferredVoice__" id="voice"></select>
-        <input name="__MSG_speed__" aria-label="__MSG_speed__" type="range" id="rate" min="50" max="200" value="100" class="nudge">
+        <input name="__MSG_speed__" aria-label="__MSG_speed__" type="range" id="rate" min="50" max="200" value="100">
         <output for="rate" id="rate-value">100</output>
       </p>
 
       <p>
-        <input name="__MSG_enableSpeakOnSelection__" type="checkbox" id="auto" checked="checked" class="nudge" aria-describedby="shortcut">
+        <input name="__MSG_enableSpeakOnSelection__" type="checkbox" id="auto" checked="checked" aria-describedby="shortcut">
         <label for="auto">__MSG_enableSpeakOnSelection__</label>
       </p>
 
@@ -52,6 +53,7 @@
       <p><small id="nounproject">__MSG_iconAttribution__</small></p>
     </form>
 
+    <script src="browser-polyfill.min.js"></script>
     <script src="l18n.js"></script>
     <script src="options.js"></script>
 

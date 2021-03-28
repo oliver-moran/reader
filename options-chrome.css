@@ -19,24 +19,36 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-html, body {
-  background: white;
-  overflow: hidden;
-}
-
-.nudge {
-  position: relative;
-  top: 5px;
-}
-
-input[type="range"] {
+select, input[type="range"] {
   width: 100px;
 }
 
-button {
-  margin-left: 0;
+input[type="range"] {
+  position: relative;
+  top: 4px;
+}
+
+input[type="checkbox"]:indeterminate {
+  appearance: auto;
+}
+
+input[type="checkbox"]:indeterminate::before {
+  display: none;
+}
+
+output[for="rate"], label[for="auto"] {
+  position: relative;
+  top: 1px;
 }
 
 output::after {
   content: "%";
+}
+
+code {
+  font-size: 133%;
+}
+
+hr {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }

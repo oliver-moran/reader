@@ -19,6 +19,19 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+// remove Firefox or Chrome specific stylesheets
+if (window.navigator.userAgent.indexOf("Chrome") > -1) removeStylesheets("firefox");
+else removeStylesheets("chrome");
+
+// remove link tags of a specified class
+function removeStylesheets(app){
+  const styles = document.querySelectorAll("link." + app);
+  for (let i=0; i < styles.length; i++) {
+    const style = styles[i];
+    style.parentNode.removeChild(style);
+  }
+}
+
 const T = 250;
 
 let voice = document.getElementById("voice");
@@ -84,29 +97,14 @@ function insertNounProjectLink() {
   link.appendChild(text3);
 }
 
-browser.storage.sync.get().then((res) => {
-  // settings initiated in background.js
-  voice.value = res.voice;
-  rate.value = res.rate;
-  auto.checked = res.auto;
-  list = res.list;
-  setRateValue();
-  setIndeterminateValue();
-});
-
-// relatively cheap procedure to poll for changes to the whitelist/blacklist
-setInterval(() => {
-  browser.storage.sync.get().then((res) => {
-    // check for settings updated in background.js
-    if (list.white.length == res.list.white.length &&
-        list.black.length == res.list.black.length) return;
-    list = res.list;
-    setIndeterminateValue();
-  });
-}, 1e3);
-
 function populateVoiceList() {
-  let voices = speechSynthesis.getVoices();
+  const voices = speechSynthesis.getVoices();
+
+  // Chrome has an delay in initiating the array of voices, try again until it's ready
+  if (voices.length == 0) {
+    setTimeout(populateVoiceList, T);
+    return;
+  }
 
   for(let i = 0; i < voices.length ; i++) {
     var option = document.createElement("option");
@@ -121,22 +119,51 @@ function populateVoiceList() {
     option.setAttribute("data-name", voices[i].name);
     voice.appendChild(option);
   }
+
+  loadSettings();
 }
 
-voice.addEventListener("change", saveSettings);
-rate.addEventListener("change", saveSettings);
-auto.addEventListener("change", () => {
-  list = { white: [], black: [] };
-  saveSettings();
-});
+function loadSettings(){
+  browser.storage.sync.get().then((res) => {
+    // settings initiated in background.js
+    voice.value = res.voice || voice.value; // if null, set to what's selected (which is the default voice)
+    rate.value = res.rate;
+    auto.checked = res.auto;
+    list = res.list;
+    setRateValue();
+    setIndeterminateValue();
+  });
 
-rate.addEventListener("input", setRateValue);
-reset.addEventListener("click", () => { setTimeout((e) => {
-  list = { white: [], black: [] };
-  setRateValue();
-  setIndeterminateValue();
-  saveSettings();
-}, T); });
+  // relatively cheap procedure to poll for changes to the whitelist/blacklist
+  setInterval(() => {
+    browser.storage.sync.get().then((res) => {
+      // check for settings updated in background.js
+      if (list.white.length == res.list.white.length &&
+          list.black.length == res.list.black.length) return;
+      list = res.list;
+      setIndeterminateValue();
+    });
+  }, 1e3);
+
+  addEventListeners();
+}
+
+function addEventListeners(){
+  voice.addEventListener("change", saveSettings);
+  rate.addEventListener("change", saveSettings);
+  auto.addEventListener("change", () => {
+    list = { white: [], black: [] };
+    saveSettings();
+  });
+
+  rate.addEventListener("input", setRateValue);
+  reset.addEventListener("click", () => { setTimeout((e) => {
+    list = { white: [], black: [] };
+    setRateValue();
+    setIndeterminateValue();
+    saveSettings();
+  }, T); });
+}
 
 function setRateValue(){
   rateValue.innerText = rate.value;

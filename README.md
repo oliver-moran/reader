@@ -1,26 +1,37 @@
 # Reader
 
-A Firefox add-on that speaks selected text and web pages. Highlight text on a webpage and that text will be read aloud.
+A Firefox and Chrome add-on that allows you to highlight text on a webpage and hear it spoken out loud. An easy keyboard shortcut allows you to read a whole paragraphs and webpages easily.
 
-## Essential usage
+This add-on will speak the text you highlight on a webpage. It allows easy navigation of the text on a page to read it out.
 
-1. Highlight a word to hear it read aloud.
-2. Press `Ctrl+Shift+Space` to select and read a whole paragraph.
-3. Press `Ctrl+Shift+Space` again to select and read the next paragraph (or block of text).
-4. Right click on selected text to open a context menu with the option to read the selected text.
+* Highlight any text on a webpage to hear it read out loud.
+* Press Ctrl+Shift+Space (or Cmd+Shift+Space on Mac) to highlight and speak a whole paragraph.
+* Press again to highlight and speak the next paragraph or block of text.
+
+You can also right click on selected text to open a context menu to speak the text you have highlighted. To stop text that is being read out, just unselect the text by clicking anywhere on the page.
+
+## Enable and disable per website
+
+The Reader icon will appear beside the Firefox address bar on pages the add-on is available. In Chrome, click on the extensions icon and pin Reader to the toolbar.
+
+* The Reader icon will highlight blue on webpages where text will be read automatically after you highlight it.
+* Click the Reader icon to enable or disable the automatic reading of text for a website.
+
+The add-on is deliberately inaccessible on on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) (as well as on `about:` pages, etc.). Icon [message](https://thenounproject.com/term/message/223770/) by Gregor Cresnar from the Noun Project.
 
 ## Preferences
 
-1. Set a preferred voice and rate of speech. The actual spoken voice will depend on the language of the webpage being read.
-2. Choose to enable or disable automatic reading of selected text. This can be over-ridden using the page action icon.
-3. Reset all preferences using the Reset button.
+Reader preferences can be set in your preferences by selecting "Extensions & Themes" in Firefox or "Extensions" in Chrome.
 
-## Page action icon
+* Set your preferred voice and rate of speech. The actual spoken voice will depend on the language of the webpage you are reading.
+* Choose to enable or disable the automatic speaking of highlighted text. This can be over-ridden for individual websites clicking the Reader icon.
 
-1. The page action icon will highlight blue on pages where automatic reading of highlighted text is enabled.
-2. Click the page action icon to enable or disable the automatic reading of selected text for a web page's domain.
-3. The page action icon will not show on pages where the add-on's functionality is unavailable.
+The keyboard command can be modified through the Firefox and Chrome preferences menu. To reset all preferences to their defaults, click the Reset button in Reader's preferences.
 
-The add-on is deliberately inaccessible on the domains where content scripts are blocked (as well as on `about:` pages, etc.): https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts
+## Privacy and security
 
-Icon [message](https://thenounproject.com/term/message/223770/) by Gregor Cresnar from the Noun Project.
+Reader doesn't transmit any data about what you are reading data away from your computer. The speech synthesis is performed locally in your browser.
+
+Your preferences are stored in your synced browser storage, which you can manage in your Firefox and Chrome preferences.
+
+The project is entirely open source. All of the [source code](https://github.com/oliver-moran/reader) can be read on GitHub.

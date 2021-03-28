@@ -19,6 +19,7 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
+const T = 250;
 const COMPLETE = "complete";
 
 // NB: Content scripts are excluded on the domains listed here:
@@ -42,7 +43,7 @@ const EXCLUDE = [
 ]
 
 // the sysnthesis voices and preferred voice
-const voices = speechSynthesis.getVoices();
+let voices = null;
 let voice = null; // the voice we prefer to use to speak
 
 // initiatie the settings from storage
@@ -52,7 +53,7 @@ browser.storage.sync.get().then((res) => {
   settings.rate = res.rate || 100; // speaking rate
   settings.auto = (res.auto === false) ? false : true; // speak on selection
   settings.list = res.list || { white: [], black: [] }; // exceptions to speak on selection setting
-  saveSettings(); // initiate storage, if necessary
+  initVoices(); // initiate voice here after settings are initiated
 });
 
 // save the settings to storage
@@ -65,13 +66,25 @@ function saveSettings(){
 function getVoice(str) {
   for (let i = 0; i < voices.length ; i++) {
     var n = voices[i].name + ' (' + voices[i].lang + ')';
-    if (str == n) return voices[i];
+    if (str == n) return voices[i]; // found the voice
+    if (str == null && voices[i].default) return voices[i]; // no voices but found the default
   }
+
   return null;
 }
 
+// Chrome has an delay in initiating the array of voices, so we have to init like this
+function initVoices(){
+  voices = speechSynthesis.getVoices();
+  if (voices.length == 0) {
+    setTimeout(initVoices, T);
+  } else { // if we still have to set the voice
+    saveSettings(); // initiate storage, if necessary
+  }
+}
+
 // set up a context menu that will speak highlighted text
-browser.menus.create({
+(chrome.contextMenus || browser.menus).create({
   id: "speak-selection",
   title: browser.i18n.getMessage("menuSpeakSelection"),
   contexts: ["selection"],
@@ -79,15 +92,23 @@ browser.menus.create({
   visible: false
 });
 
-// update visibility of the context menu per domain
+// set up a context menu that will speak highlighted text
+(chrome.contextMenus || browser.menus).create({
+  id: "page-action-item",
+  title: browser.i18n.getMessage("pageActionItemEnabled", "this website"),
+  contexts: ["page_action"],
+  documentUrlPatterns: ["*://*/*"]
+});
+
+// update visibility of the context menus per domain
 function updateContextMenu(domain) {
-  browser.menus.update("speak-selection", {
+  (chrome.contextMenus || browser.menus).update("speak-selection", {
     visible: (EXCLUDE.indexOf(domain) == -1)
   });
 }
 
 // event listener for the context menu
-browser.menus.onClicked.addListener((info, tab) => {
+(chrome.contextMenus || browser.menus).onClicked.addListener((info, tab) => {
   switch (info.menuItemId) {
     case "speak-selection":
       // if (tab.MutedInfo.muted) return;
@@ -95,6 +116,9 @@ browser.menus.onClicked.addListener((info, tab) => {
         // we need to detect the language of the page in the active tab
         speakText(info.selectionText, lang);
       });
+      break;
+    case "page-action-item":
+      onPageAction();
       break;
   }
 });
@@ -170,27 +194,30 @@ browser.tabs.onActivated.addListener((e) => {
     let domain = getDomainFromURL(url);
     if (domain != "") {
       updateContextMenu(domain);
+      setPageActionIcon(domain, tab.id);
     }
   });
 });
 
 // event listener for when the page action button is clicked
-browser.pageAction.onClicked.addListener((e) => {
+browser.pageAction.onClicked.addListener(onPageAction);
+
+function onPageAction(e){
   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
     let tab = tabs[0];
     let url = tab.url;
     let domain = getDomainFromURL(url);
     if (domain != "") {
       // only process once we know the domain
-      onPageAction(domain);
+      updateWhiteAndBlackLists(domain);
       setPageActionIcon(domain, tab.id);
       updateContextMenu(domain);
     }
   });
-});
+}
 
 // method to whitelist or blacklist a domain when the page action is clicked
-function onPageAction(domain) {
+function updateWhiteAndBlackLists(domain) {
   // remember if the domain had been in one of the two lists
   let wasWhiteListed = (settings.list.white.indexOf(domain) > -1);
   let wasBlackListed = (settings.list.black.indexOf(domain) > -1);
@@ -229,22 +256,37 @@ function setPageActionIcon(domain, id){
   const PAGE_ACTION_TITLE = browser.i18n.getMessage("pageActionTitle", domain);
   const PAGE_ACTION_TITLE_DISABLED = browser.i18n.getMessage("pageActionTitleDisabled", domain);
 
+  const PAGE_ACTION_ITEM_ENABLED = browser.i18n.getMessage("pageActionItemEnabled", domain);
+  const PAGE_ACTION_ITEM_DISABLED = browser.i18n.getMessage("pageActionItemDisabled", domain);
+
   if (settings.auto && isBlackListed) {
     // speak on selection but domain blacklisted, so icon is disabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-light.svg" });
     browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE_DISABLED });
+    (chrome.contextMenus || browser.menus).update("page-action-item", {
+      title: PAGE_ACTION_ITEM_DISABLED
+    });
   } else if (!settings.auto && isWhiteListed) {
     // not speak on selection but domain is whitelisted, so icon is enabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-enabled.svg" });
     browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE });
+    (chrome.contextMenus || browser.menus).update("page-action-item", {
+      title: PAGE_ACTION_ITEM_ENABLED
+    });
   } else if (settings.auto) {
     // speak on selection (domain not listed), so icon is enabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-enabled.svg" });
     browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE });
+    (chrome.contextMenus || browser.menus).update("page-action-item", {
+      title: PAGE_ACTION_ITEM_ENABLED
+    });
   } else {
     // not speak on selection, so icon is disabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-light.svg" });
     browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE_DISABLED });
+    (chrome.contextMenus || browser.menus).update("page-action-item", {
+      title: PAGE_ACTION_ITEM_ENABLED
+    });
   }
 }
 

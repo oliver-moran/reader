@@ -1,6 +1,6 @@
 {
   "description": {
-    "message": "Speaks selected text and web pages.",
+    "message": "Speaks highlighted text on webpages.",
     "description": "Description of extension."
   },
   "menuSpeakSelection": {
@@ -8,11 +8,11 @@
     "description": "Title of context menu item to speak the selected text."
   },
   "commandSpeakSelection": {
-    "message": "Speak the selected paragraph or continue to the next paragraph.",
+    "message": "Read by paragraph",
     "description": "Description of keyboard shortcut to speak selected paragraph or continue to the next paragraph."
   },
   "pageActionTitle": {
-    "message": "Disable speak on selection for $DOMAIN$",
+    "message": "Speak on selection is enabled for $DOMAIN$",
     "description": "Default title of page action button.",
     "placeholders": {
       "domain" : {
@@ -22,6 +22,26 @@
     }
   },
   "pageActionTitleDisabled": {
+    "message": "Speak on selection is disabled for $DOMAIN$",
+    "description": "Default title of page action button.",
+    "placeholders": {
+      "domain" : {
+        "content" : "$1",
+        "example" : "www.example.com"
+      }
+    }
+  },
+  "pageActionItemEnabled": {
+    "message": "Disable speak on selection for $DOMAIN$",
+    "description": "Default title of page action button.",
+    "placeholders": {
+      "domain" : {
+        "content" : "$1",
+        "example" : "www.example.com"
+      }
+    }
+  },
+  "pageActionItemDisabled": {
     "message": "Enable speak on selection for $DOMAIN$",
     "description": "Title of page action button when disabled.",
     "placeholders": {
