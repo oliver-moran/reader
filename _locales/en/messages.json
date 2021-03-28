@@ -1,0 +1,70 @@
+{
+  "description": {
+    "message": "Speaks selected text and web pages.",
+    "description": "Description of extension."
+  },
+  "menuSpeakSelection": {
+    "message": "Speak \"%s\"",
+    "description": "Title of context menu item to speak the selected text."
+  },
+  "commandSpeakSelection": {
+    "message": "Speak the selected paragraph or continue to the next paragraph.",
+    "description": "Description of keyboard shortcut to speak selected paragraph or continue to the next paragraph."
+  },
+  "pageActionTitle": {
+    "message": "Disable speak on selection for $DOMAIN$",
+    "description": "Default title of page action button.",
+    "placeholders": {
+      "domain" : {
+        "content" : "$1",
+        "example" : "www.example.com"
+      }
+    }
+  },
+  "pageActionTitleDisabled": {
+    "message": "Enable speak on selection for $DOMAIN$",
+    "description": "Title of page action button when disabled.",
+    "placeholders": {
+      "domain": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "preferredVoice": {
+    "message": "Preferred voice",
+    "description": "Label for preferred voice dropdown."
+  },
+  "speed": {
+    "message": "Speed",
+    "description": "Label for speed slider."
+  },
+  "enableSpeakOnSelection": {
+    "message": "Enable speak on selection for all pages",
+    "description": "Label for speak on selection check box."
+  },
+  "shortcutDescription": {
+    "message": "Use $SHORTCUT$ to speak the selected paragraph or continue to the next paragraph.",
+    "description": "Description of use of the keyboard shortcut.",
+    "placeholders": {
+      "shortcut": {
+        "content": "%SHORTCUT%",
+        "example": "<code id=\"shortcut-value\"></code>"
+      }
+    }
+  },
+  "reset": {
+    "message": "Reset",
+    "description": "Label for the reset button."
+  },
+  "iconAttribution": {
+    "message": "Icon \"$LINK$\" by Gregor Cresnar from the Noun Project.",
+    "description": "Attribution for the Noun Project icon.",
+    "placeholders": {
+      "link": {
+        "content": "%LINK%",
+        "example": "<a href=\"https://thenounproject.com/term/message/223770/\" target=\"_blank\">message</a>"
+      }
+    }
+  }
+}

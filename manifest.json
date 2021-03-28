@@ -1,0 +1,84 @@
+{
+  "manifest_version": 2,
+  "name": "Reader",
+  "version": "1.0",
+  "default_locale": "en",
+  "description": "__MSG_description__",
+  "developer": {
+    "name": "Oliver Moran",
+    "url": ""
+  },
+  "icons": {
+    "48": "icons/reader-icon.svg",
+    "96": "icons/reader-icon.svg"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*/*"],
+      "exclude_matches": [
+        "*://accounts-static.cdn.mozilla.net/*",
+        "*://accounts.firefox.com/*",
+        "*://addons.cdn.mozilla.net/*",
+        "*://addons.mozilla.org/*",
+        "*://api.accounts.firefox.com/*",
+        "*://content.cdn.mozilla.net/*",
+        "*://content.cdn.mozilla.net/*",
+        "*://discovery.addons.mozilla.org/*",
+        "*://input.mozilla.org/*",
+        "*://install.mozilla.org/*",
+        "*://oauth.accounts.firefox.com/*",
+        "*://profile.accounts.firefox.com/*",
+        "*://support.mozilla.org/*",
+        "*://sync.services.mozilla.com/*",
+        "*://testpilot.firefox.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "permissions": ["menus", "storage", "tabs"],
+  "options_ui": {
+    "page": "options.html",
+    "browser_style": false
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "strict_min_version": "64.0"
+    }
+  },
+  "commands": {
+    "command-speak-selection": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+Space"
+      },
+      "description": "__MSG_commandSpeakSelection__"
+    }
+  },
+  "page_action": {
+    "default_icon": "icons/reader-icon-light.svg",
+    "default_title": "__MSG_pageActionTitleDisabled__",
+    "show_matches": ["*://*/*"],
+    "hide_matches": [
+      "*://accounts-static.cdn.mozilla.net/*",
+      "*://accounts.firefox.com/*",
+      "*://addons.cdn.mozilla.net/*",
+      "*://addons.mozilla.org/*",
+      "*://api.accounts.firefox.com/*",
+      "*://content.cdn.mozilla.net/*",
+      "*://content.cdn.mozilla.net/*",
+      "*://discovery.addons.mozilla.org/*",
+      "*://input.mozilla.org/*",
+      "*://install.mozilla.org/*",
+      "*://oauth.accounts.firefox.com/*",
+      "*://profile.accounts.firefox.com/*",
+      "*://support.mozilla.org/*",
+      "*://sync.services.mozilla.com/*",
+      "*://testpilot.firefox.com/*"
+    ],
+    "pinned": true
+  }
+}
