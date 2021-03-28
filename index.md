@@ -1,37 +1,35 @@
-## Welcome to GitHub Pages
+A Firefox and Chrome add-on that allows you to highlight text on a webpage and hear it spoken out loud. An easy keyboard shortcut allows you to read a whole paragraphs and webpages easily.
 
-You can use the [editor on GitHub](https://github.com/oliver-moran/reader/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+This add-on will speak the text you highlight on a webpage. It allows easy navigation of the text on a page to read it out.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+* Highlight any text on a webpage to hear it read out loud.
+* Press Ctrl+Shift+Space (or Cmd+Shift+Space on Mac) to highlight and speak a whole paragraph.
+* Press again to highlight and speak the next paragraph or block of text.
 
-### Markdown
+You can also right click on selected text to open a context menu to speak the text you have highlighted. To stop text that is being read out, just unselect the text by clicking anywhere on the page.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+## Enable and disable per website
 
-```markdown
-Syntax highlighted code block
+The Reader icon will appear beside the Firefox address bar on pages the add-on is available. In Chrome, click on the extensions icon and pin Reader to the toolbar.
 
-# Header 1
-## Header 2
-### Header 3
+* The Reader icon will highlight blue on webpages where text will be read automatically after you highlight it.
+* Click the Reader icon to enable or disable the automatic reading of text for a website.
 
-- Bulleted
-- List
+The add-on is deliberately inaccessible on on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) (as well as on `about:` pages, etc.). Icon [message](https://thenounproject.com/term/message/223770/) by Gregor Cresnar from the Noun Project.
 
-1. Numbered
-2. List
+## Preferences
 
-**Bold** and _Italic_ and `Code` text
+Reader preferences can be set in your preferences by selecting "Extensions & Themes" in Firefox or "Extensions" in Chrome.
 
-[Link](url) and ![Image](src)
-```
+* Set your preferred voice and rate of speech. The actual spoken voice will depend on the language of the webpage you are reading.
+* Choose to enable or disable the automatic speaking of highlighted text. This can be over-ridden for individual websites clicking the Reader icon.
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+The keyboard command can be modified through the Firefox and Chrome preferences menu. To reset all preferences to their defaults, click the Reset button in Reader's preferences.
 
-### Jekyll Themes
+## Privacy and security
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/oliver-moran/reader/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Reader doesn't transmit any data about what you are reading data away from your computer. The speech synthesis is performed locally in your browser.
 
-### Support or Contact
+Your preferences are stored in your synced browser storage, which you can manage in your Firefox and Chrome preferences.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+The project is entirely open source. All of the [source code](https://github.com/oliver-moran/reader) can be read on GitHub.
