@@ -1,1 +1,5 @@
 theme: jekyll-theme-minimal
+title: Reader
+description: Speaks highlighted text on webpages
+logo: reader-icon.svg
+show_downloads: true
