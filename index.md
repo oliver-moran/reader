@@ -15,7 +15,8 @@ The Reader icon will appear beside the Firefox address bar on pages the add-on i
 * The Reader icon will highlight blue on webpages where text will be read automatically after you highlight it.
 * Click the Reader icon to enable or disable the automatic reading of text for a website.
 
-The add-on is deliberately inaccessible on on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) (as well as on `about:` pages, etc.). Icon [message](https://thenounproject.com/term/message/223770/) by Gregor Cresnar from the Noun Project.
+The add-on is deliberately inaccessible on on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) (as well as on `about:` pages, etc.).
+
 
 ## Preferences
 
@@ -33,3 +34,7 @@ Reader doesn't transmit any data about what you are reading data away from your 
 Your preferences are stored in your synced browser storage, which you can manage in your Firefox and Chrome preferences.
 
 The project is entirely open source. All of the [source code](https://github.com/oliver-moran/reader) can be read on GitHub.
+
+---
+
+Icon [message](https://thenounproject.com/term/message/223770/) by Gregor Cresnar from the Noun Project.
