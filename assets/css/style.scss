@@ -7,3 +7,8 @@ a:hover, a:focus {
   font-weight: normal;
   text-decoration: underline;
 }
+
+header ul a:hover, header ul a:focus {
+  font-weight: normal;
+  text-decoration: none;
+}
