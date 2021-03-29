@@ -1,5 +1,5 @@
 theme: jekyll-theme-minimal
 title: Reader
 description: Speaks highlighted text on webpages
-logo: https://raw.githubusercontent.com/oliver-moran/reader/main/icons/reader-icon.svg
+logo: /assets/img/reader-icon.svg
 show_downloads: true
