@@ -217,7 +217,10 @@ function updatePageAction(tab){
     title: PAGE_ACTION_ITEM_DISABLED,
     enabled: false
   });
-  (chrome.contextMenus || browser.menus).update("speak-selection", { enabled: false });
+  (chrome.contextMenus || browser.menus).update("speak-selection", {
+    visible: false,
+    enabled: false
+  });
 
   // test that content.js is responsive
   browser.tabs.executeScript(tab.id, { // tab.status == COMPLETE ?
