@@ -175,9 +175,9 @@ browser.commands.onCommand.addListener(function (command) {
 });
 
 // event listeners for when a tab loads a new page
-browser.tabs.onUpdated.addListener(updatePageAction);
+browser.tabs.onUpdated.addListener(onTabUpdated);
 // event listener for changes in focused tab (also works implicity when a tab is closed)
-browser.tabs.onActivated.addListener(updatePageAction);
+browser.tabs.onActivated.addListener(onTabUpdated);
 
 // function onUpdate(e){
 //   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
@@ -192,35 +192,41 @@ browser.tabs.onActivated.addListener(updatePageAction);
 //   });
 // }
 
-function updatePageAction(e){
+// event listener for loading of page and on tab focus
+function onTabUpdated(e){
   speechSynthesis.cancel(); // stop talking if already was
 
   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
     let tab = tabs[0];
-    let url = tab.url;
-    let domain = getDomainFromURL(url);
-
-    // disable all the messaging and icons
-    const PAGE_ACTION_TITLE = browser.i18n.getMessage("pageActionTitleNotAllowed", domain);
-    const PAGE_ACTION_ITEM_DISABLED = browser.i18n.getMessage("pageActionItemDisabled", domain);
-
-    // browser.pageAction.setIcon({ tabId: tab.id, path: "icons/reader-icon-light.svg" });
-    browser.pageAction.setTitle({ tabId: tab.id, title: PAGE_ACTION_TITLE });
-    (chrome.contextMenus || browser.menus).update("page-action-item", {
-      title: PAGE_ACTION_ITEM_DISABLED,
-      enabled: false
-    });
-    (chrome.contextMenus || browser.menus).update("speak-selection", { enabled: false });
-
-    if (tab.status == COMPLETE) {
-      browser.tabs.executeScript(tab.id, {
-        code: "browser.runtime.sendMessage({ method: \"set-page-action\" });",
-        runAt: "document_start"
-      });
-    }
+    updatePageAction(tab);
   });
 }
 
+// starts the process of updateing a tab action for a particular tab
+function updatePageAction(tab){
+  let url = tab.url;
+  let domain = getDomainFromURL(url);
+
+  // disable all the messaging and icons
+  const PAGE_ACTION_TITLE = browser.i18n.getMessage("pageActionTitleNotAllowed", domain);
+  const PAGE_ACTION_ITEM_DISABLED = browser.i18n.getMessage("pageActionItemDisabled", domain);
+
+  // browser.pageAction.setIcon({ tabId: tab.id, path: "icons/reader-icon-light.svg" });
+  browser.pageAction.setTitle({ tabId: tab.id, title: PAGE_ACTION_TITLE });
+  (chrome.contextMenus || browser.menus).update("page-action-item", {
+    title: PAGE_ACTION_ITEM_DISABLED,
+    enabled: false
+  });
+  (chrome.contextMenus || browser.menus).update("speak-selection", { enabled: false });
+
+  // test that content.js is responsive
+  browser.tabs.executeScript(tab.id, { // tab.status == COMPLETE ?
+    code: "browser.runtime.sendMessage({ method: \"set-page-action\" });",
+    runAt: "document_start"
+  });
+}
+
+// completes the process of updating the page action details
 function setPageAction(tab){
   let url = tab.url;
   let domain = getDomainFromURL(url);
@@ -229,6 +235,15 @@ function setPageAction(tab){
     setPageActionIcon(domain, tab.id);
   }
 }
+
+// initiate all open tabs with the correct page actions - this is largely a fix
+// for Chrome where the content.js is not loaded until refresh.
+browser.tabs.query({}).then((tabs) => {
+  for (let tab of tabs) {
+    // tab.url requires the `tabs` permission or a matching host permission.
+    updatePageAction(tab);
+  }
+});
 
 // event listener for when the page action button is clicked
 browser.pageAction.onClicked.addListener(onPageAction);
@@ -243,7 +258,6 @@ function onPageAction(e){
       // only process once we know the domain
       updateWhiteAndBlackLists(domain);
       setPageActionIcon(domain, tab.id);
-      updateContextMenu(domain);
     }
   });
 }
