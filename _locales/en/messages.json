@@ -12,8 +12,28 @@
     "description": "Description of keyboard shortcut to speak selected paragraph or continue to the next paragraph."
   },
   "pageActionTitle": {
-    "message": "Speak on selection is enabled for $DOMAIN$",
+    "message": "Speak on selection is enabled for this website",
     "description": "Default title of page action button.",
+    "placeholders": {
+      "domain" : {
+        "content" : "$1",
+        "example" : "www.example.com"
+      }
+    }
+  },
+  "pageActionTitleNotAllowed": {
+    "message": "Reader is not allowed on $DOMAIN$",
+    "description": "Title of page action button when content scripts do not respond.",
+    "placeholders": {
+      "domain" : {
+        "content" : "$1",
+        "example" : "www.example.com"
+      }
+    }
+  },
+  "pageActionTitleEnabled": {
+    "message": "Speak on selection is enabled for $DOMAIN$",
+    "description": "Title of page action button item when enabled.",
     "placeholders": {
       "domain" : {
         "content" : "$1",
@@ -23,7 +43,7 @@
   },
   "pageActionTitleDisabled": {
     "message": "Speak on selection is disabled for $DOMAIN$",
-    "description": "Default title of page action button.",
+    "description": "Title of page action button item when disabled.",
     "placeholders": {
       "domain" : {
         "content" : "$1",
@@ -33,7 +53,7 @@
   },
   "pageActionItemEnabled": {
     "message": "Disable speak on selection for $DOMAIN$",
-    "description": "Default title of page action button.",
+    "description": "Title of page action menu item when enabled.",
     "placeholders": {
       "domain" : {
         "content" : "$1",
@@ -43,7 +63,7 @@
   },
   "pageActionItemDisabled": {
     "message": "Enable speak on selection for $DOMAIN$",
-    "description": "Title of page action button when disabled.",
+    "description": "Title of page action menu item when disabled.",
     "placeholders": {
       "domain": {
         "content": "$1",

@@ -23,9 +23,17 @@ html, body {
   background: white;
 }
 
+.nobr {
+  white-space: nowrap;
+}
+
 #rate, #auto {
   position: relative;
   top: 5px;
+}
+
+select {
+  width: 200px;
 }
 
 input[type="range"] {

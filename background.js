@@ -70,7 +70,7 @@ function getVoice(str) {
     if (str == null && voices[i].default) return voices[i]; // no voices but found the default
   }
 
-  return null;
+  return (voices.length > 0) ? voices[0] : null; // attemt to set default to first, if no default
 }
 
 // Chrome has an delay in initiating the array of voices, so we have to init like this
@@ -103,7 +103,8 @@ function initVoices(){
 // update visibility of the context menus per domain
 function updateContextMenu(domain) {
   (chrome.contextMenus || browser.menus).update("speak-selection", {
-    visible: (EXCLUDE.indexOf(domain) == -1)
+    visible: (EXCLUDE.indexOf(domain) == -1),
+    enabled: true
   });
 }
 
@@ -124,18 +125,18 @@ function updateContextMenu(domain) {
 });
 
 // listen for messages coming in from content.js and options.js
-browser.runtime.onMessage.addListener((info, tab) => {
-  switch (info.method) {
+browser.runtime.onMessage.addListener((message, sender) => {
+  switch (message.method) {
     case "speak-selection":
       // main method used to speak text
       browser.tabs.detectLanguage().then(lang => {
         // if (tabs.MutedInfo.muted) return;
-        let url = tab.url;
+        let url = sender.url;
         let domain = getDomainFromURL(url);
-        if (info.text.trim() == "")  { speakText("", lang) } // always allow to stop speaking by unselecting
+        if (message.text.trim() == "")  { speakText("", lang) } // always allow to stop speaking by unselecting
         else if ((settings.auto && settings.list.black.indexOf(domain) == -1) || // auto and not blacklisted
                  (!settings.auto && settings.list.white.indexOf(domain) > -1) || // not auto but white listed
-                  info.f) { speakText(info.text, lang) }; // .. or force flag used
+                  message.f) { speakText(message.text, lang) }; // .. or force flag used
       });
       break;
     case "speak-text":
@@ -143,16 +144,19 @@ browser.runtime.onMessage.addListener((info, tab) => {
       // if (tabs.MutedInfo.muted) return;
       browser.tabs.detectLanguage().then(lang => {
         // detect langage and speak the text
-        speakText(info.text, lang);
+        speakText(message.text, lang);
       });
       break;
     case "update-settings":
       // settings have been updated in options.js
-      settings.voice = info.settings.voice;
-      settings.rate = info.settings.rate;
-      settings.auto = info.settings.auto;
-      settings.list = info.settings.list;
+      settings.voice = message.settings.voice;
+      settings.rate = message.settings.rate;
+      settings.auto = message.settings.auto;
+      settings.list = message.settings.list;
       saveSettings();
+      break;
+    case "set-page-action":
+      setPageAction(sender.tab);
       break;
   }
 });
@@ -171,38 +175,66 @@ browser.commands.onCommand.addListener(function (command) {
 });
 
 // event listeners for when a tab loads a new page
-browser.tabs.onUpdated.addListener(() => {
-  speechSynthesis.cancel(); // stop talking if already was
-
-  browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
-    let tab = tabs[0];
-    let url = tab.url;
-    let domain = getDomainFromURL(url);
-    if (domain != "") { // && tab.status == COMPLETE) {
-      // only process once we know the domain
-      setPageActionIcon(domain, tab.id);
-    }
-  });
-});
-
+browser.tabs.onUpdated.addListener(updatePageAction);
 // event listener for changes in focused tab (also works implicity when a tab is closed)
-browser.tabs.onActivated.addListener((e) => {
+browser.tabs.onActivated.addListener(updatePageAction);
+
+// function onUpdate(e){
+//   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
+//     let tab = tabs[0];
+//     let url = tab.url;
+//     let domain = getDomainFromURL(url);
+//     if (domain != "") {
+//       // only process once we know the domain
+//       setPageActionIcon(domain, tab.id);
+//       updateContextMenu(domain);
+//     }
+//   });
+// }
+
+function updatePageAction(e){
   speechSynthesis.cancel(); // stop talking if already was
+
   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
     let tab = tabs[0];
     let url = tab.url;
     let domain = getDomainFromURL(url);
-    if (domain != "") {
-      updateContextMenu(domain);
-      setPageActionIcon(domain, tab.id);
+
+    // disable all the messaging and icons
+    const PAGE_ACTION_TITLE = browser.i18n.getMessage("pageActionTitleNotAllowed", domain);
+    const PAGE_ACTION_ITEM_DISABLED = browser.i18n.getMessage("pageActionItemDisabled", domain);
+
+    // browser.pageAction.setIcon({ tabId: tab.id, path: "icons/reader-icon-light.svg" });
+    browser.pageAction.setTitle({ tabId: tab.id, title: PAGE_ACTION_TITLE });
+    (chrome.contextMenus || browser.menus).update("page-action-item", {
+      title: PAGE_ACTION_ITEM_DISABLED,
+      enabled: false
+    });
+    (chrome.contextMenus || browser.menus).update("speak-selection", { enabled: false });
+
+    if (tab.status == COMPLETE) {
+      browser.tabs.executeScript(tab.id, {
+        code: "browser.runtime.sendMessage({ method: \"set-page-action\" });",
+        runAt: "document_start"
+      });
     }
   });
-});
+}
+
+function setPageAction(tab){
+  let url = tab.url;
+  let domain = getDomainFromURL(url);
+  if (domain != "") {
+    updateContextMenu(domain);
+    setPageActionIcon(domain, tab.id);
+  }
+}
 
 // event listener for when the page action button is clicked
 browser.pageAction.onClicked.addListener(onPageAction);
 
 function onPageAction(e){
+  speechSynthesis.cancel(); // stop talking if already was
   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
     let tab = tabs[0];
     let url = tab.url;
@@ -253,7 +285,7 @@ function setPageActionIcon(domain, id){
   let isWhiteListed = (settings.list.white.indexOf(domain) > -1);
   let isBlackListed = (settings.list.black.indexOf(domain) > -1);
 
-  const PAGE_ACTION_TITLE = browser.i18n.getMessage("pageActionTitle", domain);
+  const PAGE_ACTION_TITLE_ENABLED = browser.i18n.getMessage("pageActionTitleEnabled", domain);
   const PAGE_ACTION_TITLE_DISABLED = browser.i18n.getMessage("pageActionTitleDisabled", domain);
 
   const PAGE_ACTION_ITEM_ENABLED = browser.i18n.getMessage("pageActionItemEnabled", domain);
@@ -264,28 +296,32 @@ function setPageActionIcon(domain, id){
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-light.svg" });
     browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE_DISABLED });
     (chrome.contextMenus || browser.menus).update("page-action-item", {
-      title: PAGE_ACTION_ITEM_DISABLED
+      title: PAGE_ACTION_ITEM_DISABLED,
+      enabled: true
     });
   } else if (!settings.auto && isWhiteListed) {
     // not speak on selection but domain is whitelisted, so icon is enabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-enabled.svg" });
-    browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE });
+    browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE_ENABLED });
     (chrome.contextMenus || browser.menus).update("page-action-item", {
-      title: PAGE_ACTION_ITEM_ENABLED
+      title: PAGE_ACTION_ITEM_ENABLED,
+      enabled: true
     });
   } else if (settings.auto) {
     // speak on selection (domain not listed), so icon is enabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-enabled.svg" });
-    browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE });
+    browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE_ENABLED });
     (chrome.contextMenus || browser.menus).update("page-action-item", {
-      title: PAGE_ACTION_ITEM_ENABLED
+      title: PAGE_ACTION_ITEM_ENABLED,
+      enabled: true
     });
   } else {
     // not speak on selection, so icon is disabled
     browser.pageAction.setIcon({ tabId: id, path: "icons/reader-icon-light.svg" });
     browser.pageAction.setTitle({ tabId: id, title: PAGE_ACTION_TITLE_DISABLED });
     (chrome.contextMenus || browser.menus).update("page-action-item", {
-      title: PAGE_ACTION_ITEM_ENABLED
+      title: PAGE_ACTION_ITEM_ENABLED,
+      enabled: true
     });
   }
 }

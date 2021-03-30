@@ -47,7 +47,13 @@
       "background.js"
     ]
   },
-  "permissions": ["menus", "contextMenus", "storage", "tabs"],
+  "permissions": [
+    "menus",
+    "contextMenus",
+    "storage",
+    "tabs",
+    "<all_urls>"
+  ],
   "options_ui": {
     "page": "options.html",
     "browser_style": true,
@@ -67,8 +73,8 @@
     }
   },
   "page_action": {
-    "default_icon": "icons/reader-icon-light.svg",
-    "default_title": "__MSG_pageActionTitleDisabled__",
+    "default_icon": "icons/reader-icon-light-128.png",
+    "default_title": "__MSG_pageActionTitle__",
     "show_matches": ["*://*/*"],
     "hide_matches": [
       "*://accounts-static.cdn.mozilla.net/*",

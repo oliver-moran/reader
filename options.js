@@ -106,12 +106,15 @@ function populateVoiceList() {
     return;
   }
 
+  let f = false;
+
   for(let i = 0; i < voices.length ; i++) {
     var option = document.createElement("option");
     option.textContent = voices[i].name + ' (' + voices[i].lang + ')';
 
     if(voices[i].default) {
       option.setAttribute("selected", "selected");
+      f = true;
     }
 
     option.setAttribute("value", option.textContent);
@@ -119,6 +122,8 @@ function populateVoiceList() {
     option.setAttribute("data-name", voices[i].name);
     voice.appendChild(option);
   }
+
+  if (!f) voice.selectedIndex = 0; // didn't find a default
 
   loadSettings();
 }
