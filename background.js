@@ -250,6 +250,7 @@ browser.pageAction.onClicked.addListener(onPageAction);
 
 function onPageAction(e){
   speechSynthesis.cancel(); // stop talking if already was
+
   browser.tabs.query({currentWindow: true, active: true}).then((tabs) => {
     let tab = tabs[0];
     let url = tab.url;
@@ -350,7 +351,12 @@ function getDomainFromURL(url){
 
 // speaks the given text in the given language
 function speakText(text, lang){
-  speechSynthesis.cancel(); // stop talking if already was
+  // stop talking if already was, but avoid running straight from cancel to talking
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    setTimeout(speakText, T, text, lang);
+    return;
+  }
 
   if (text && text != "") { // only do the following if there was text given
     // console.info("Reading: %s", text.trim());
