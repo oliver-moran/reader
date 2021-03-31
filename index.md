@@ -1,6 +1,6 @@
 Reader is an extension for Firefox and Chrome that allows you to select text on a webpage and hear it read out loud.
 
-Reader is not a fully-featured screen reader. It's an aid and convenience for sighted people, who might want an audio version of a webpage or to back to an email before they hit send.
+Reader is not a fully-featured screen reader. It's an aid and convenience for sighted people, who might want an audio version of a webpage or to listen back to an email before they hit send.
 
 A keyboard shortcut allows you to select whole paragraphs and navigate webpages easily. By default this shortcut is `Ctrl+Shift+Space` on Windows and `Cmd+Shift+Space` on Mac.
 
@@ -30,7 +30,7 @@ The keyboard shortcut can also be modified through the Firefox and Chrome settin
 
 ## Privacy and security
 
-Reader doesn't transmit any data about what you are reading away from your computer. The speech synthesis is performed locally in your browser. The add-on is deliberately inaccessible on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) as well as in settings pages in your browser.
+Reader doesn't transmit any data about what you are reading away from your computer. The speech synthesis is performed locally in your browser. The add-on is deliberately not allowed on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) as well as on settings pages in your browser.
 
 Reader preferences are stored in your synced browser storage, which you can manage through Firefox and Chrome settings.
 
