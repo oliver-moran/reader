@@ -10,7 +10,7 @@ The basic usage of Reader is:
 * Use the keyboard shortcut to select and read a whole paragraph.
 * Use the keyboard shortcut again to select and speak the next paragraph or block of text.
 
-## Enable and disable per website
+## Enable or disable by website
 
 The Reader icon will appear in the Firefox address bar. In Chrome, click on the extensions icon and pin the Reader icon to the toolbar.
 
