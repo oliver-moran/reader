@@ -1,37 +1,34 @@
-A Firefox and Chrome add-on that allows you to highlight text on a webpage and hear it spoken out loud. An easy keyboard shortcut allows you to read a whole paragraphs and webpages easily.
+Reader is an extension for Firefox and Chrome that allows you to select text on a webpage and hear it read out loud. A keyboard shortcut allows you to select whole paragraphs and navigate webpages easily. By default this shortcut is `Ctrl+Shift+Space` on Windows and `Cmd+Shift+Space` on Mac.
 
-This add-on will speak the text you highlight on a webpage. It allows easy navigation of the text on a page to read it out.
+The basic usage of Reader is:
 
-* Highlight any text on a webpage to hear it read out loud.
-* Press Ctrl+Shift+Space (or Cmd+Shift+Space on Mac) to highlight and speak a whole paragraph.
-* Press again to highlight and speak the next paragraph or block of text.
-
-You can also right click on selected text to open a context menu to speak the text you have highlighted. To stop text that is being read out, just unselect the text by clicking anywhere on the page.
+* Select any text on a webpage to hear it read out loud.
+* Use the keyboard shortcut to select and read a whole paragraph.
+* Use the keyboard shortcut again to select and speak the next paragraph or block of text.
 
 ## Enable and disable per website
 
-The Reader icon will appear beside the Firefox address bar on pages the add-on is available. In Chrome, click on the extensions icon and pin Reader to the toolbar.
+The Reader icon will appear in the Firefox address bar. In Chrome, click on the extensions icon and pin the Reader icon to the toolbar.
 
-* The Reader icon will highlight blue on webpages where text will be read automatically after you highlight it.
-* Click the Reader icon to enable or disable the automatic reading of text for a website.
+Click the Reader icon to enable or disable speak on selection for individual websites. The icon will highlight blue on websites where speak on selection is enabled. By default, speak on selection is enabled for all websites. You can change this in the Reader preferences in your browser.
 
-The add-on is deliberately inaccessible on on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) (as well as on `about:` pages, etc.).
+On pages where speak on selection is disabled, you can still use the keyboard shortcut to select and read whole paragraphs. You can also right click on selected text to open a context menu and choose to speak the text you have selected.
 
+To stop text that is being read, just unselect the text by clicking anywhere on the webpage.
 
 ## Preferences
 
-Reader preferences can be set in your preferences by selecting "Extensions & Themes" in Firefox or "Extensions" in Chrome.
+Open Reader's preferences by selecting "Extensions & Themes" in Firefox or "Extensions" in Chrome in your browser settings.
 
-* Set your preferred voice and rate of speech. The actual spoken voice will depend on the language of the webpage you are reading.
-* Choose to enable or disable the automatic speaking of highlighted text. This can be over-ridden for individual websites clicking the Reader icon.
+You can set your preferred voice and rate of speech. The actual spoken voice will depend on the language of the webpage you are reading. To reset preferences to their defaults, click the Reset button in Reader's preferences.
 
-The keyboard command can be modified through the Firefox and Chrome preferences menu. To reset all preferences to their defaults, click the Reset button in Reader's preferences.
+The keyboard shortcut can also be modified through the Firefox and Chrome settings.
 
 ## Privacy and security
 
-Reader doesn't transmit any data about what you are reading data away from your computer. The speech synthesis is performed locally in your browser.
+Reader doesn't transmit any data about what you are reading away from your computer. The speech synthesis is performed locally in your browser. The add-on is deliberately inaccessible on [some domains](https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/API/storage/sync) as well as in settings pages in your browser.
 
-Your preferences are stored in your synced browser storage, which you can manage in your Firefox and Chrome preferences.
+Reader preferences are stored in your synced browser storage, which you can manage through Firefox and Chrome settings.
 
 The project is entirely open source. All of the [source code](https://github.com/oliver-moran/reader) can be read on GitHub.
 
