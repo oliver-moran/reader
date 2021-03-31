@@ -1,4 +1,6 @@
-Reader is an extension for Firefox and Chrome that allows you to select text on a webpage and hear it read out loud. A keyboard shortcut allows you to select whole paragraphs and navigate webpages easily. By default this shortcut is `Ctrl+Shift+Space` on Windows and `Cmd+Shift+Space` on Mac.
+Reader is an extension for Firefox and Chrome that allows you to select text on a webpage and hear it read out loud. Reader is not a fully-featured screen reader. It's an aid and convenience for sighted people, who might want an audio version of a webpage or to back to an email before they hit send.
+
+A keyboard shortcut allows you to select whole paragraphs and navigate webpages easily. By default this shortcut is `Ctrl+Shift+Space` on Windows and `Cmd+Shift+Space` on Mac.
 
 The basic usage of Reader is:
 
