@@ -1,4 +1,4 @@
-Reader is an extension for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/reader-tts/) and [Chrome](https://chrome.google.com/webstore/detail/reader/hjmlmmjagkgflecknfdlplgpdijmhabb) that allows you to select text on a webpage and hear it read out loud.
+Reader is an [extension for Firefox](https://addons.mozilla.org/en-US/firefox/addon/reader-tts/) [and Chrome](https://chrome.google.com/webstore/detail/reader/hjmlmmjagkgflecknfdlplgpdijmhabb) that allows you to select text on a webpage and hear it read out loud.
 
 Reader is not a fully-featured screen reader. It's an aid and convenience for sighted people, who might want an audio version of a webpage or to listen back to an email before they hit send.
 
